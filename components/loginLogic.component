@@ -1,0 +1,2221 @@
+<apex:component >
+    <script>
+       var usernameEntered = null;
+       var passwordEntered = null;
+       var AccountId = null;
+       var newPasswordEntered = null;
+       var newConfirmPasswordEntered = null;
+       var forgetUserNameEntered = null;
+       var screenSize = null;
+       var UrlAccId = null;
+       var isActive = null;
+       var isGraduated = null;
+       var isBackButtonClicked = true;
+       var mainSiteUrl = null;
+       $(window).load(function() {
+       		$('body').css('display', 'block');
+       });
+
+       $(document).ready(function() {
+       	jobs = $('#sm-tab-main-text').html();
+       	jobstring = String(jobs);
+       	guest = $('#sm-tab-2').html();
+       	//alert(guest);
+    	//guestString = String(guest);
+       	
+       	var FilterList = ['pageSize', 'pageSizebottom', 'pageSizeCourse', 'pageSize1', 'pageSizeSpeaker', 'pageSizeGuest', 'pageSizesmallCourse', 'pageSizesmallCoursebottom', 'pageSizesmall', 'pageSizesmallbottom', 'pageSizesmallspeaker', 'pageSizesmallspeakerbottom', 'pageSizemed', 'pageSizemedbottom', 'pageSizemedcoursebottom', 'pageSizemedcourse', 'pageSizemedspeakerbottom', 'pageSizemedspeaker'];
+       	for(var i=0; i < FilterList.length; i++) {
+       		//alert(FilterList[i]);
+			if($('#'+FilterList[i]).length) {
+		   		var mySelect = document.getElementById(FilterList[i]);
+		        mySelect.remove(mySelect.selectedIndex);
+		        mySelect.selectedIndex = 2;
+		        //alert("1");              
+		   	}       		
+       	}
+
+		$(function (){
+		    $(".noCancel").hide();
+		    $(".yesCancel").hide();
+		    $(".CancelRegistration").click(function(){
+			    $(".noCancel").show();
+			    $(".yesCancel").show();
+			 	$(".CancelRegistration").hide();
+			 	$(".alreadyRegistered").hide();
+			});
+			$(".noCancel").click(function(){
+				$(".CancelRegistration").show();
+				$(".alreadyRegistered").show();
+				$(".yesCancel").hide();
+				$(".noCancel").hide();
+		    });
+		});
+    
+       	//alert(jobs);
+       		UCFBWithLoginController.updateListToBeUpdated(function(result, event) {
+               if (event.status) {
+               } else {
+                   alert(event.message);
+               }
+           	});
+           	
+           	document.getElementById('mediaAll').disabled = true;
+           	//alert(document.getElementById('mediaAll').disabled);
+       		var hash = window.location.hash;
+		 	if(hash == '#tab1Full') {
+		 		$('#jcfull').addClass('slds-active');
+		        $('#jcfull a').attr('aria-selected', 'true');
+		        $('#jcfull-tab1').addClass('slds-show');
+		        $('#jcfull-tab1').removeClass('slds-hide');
+		        ////alert("active, aria-selected:true. Now Show");
+		
+		        $('#ccfull').removeClass('slds-active');
+		        $('#ccfull a').attr('aria-selected', 'false');
+		        $('#ccfull-tab2').removeClass('slds-show');
+		        $('#ccfull-tab2').addClass('slds-hide');
+		        ////alert("Tab-1 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#gsfull').removeClass('slds-active');
+		        $('#gsfull a').attr('aria-selected', 'false');
+		        $('#gsfull-tab3').removeClass('slds-show');
+		        $('#gsfull-tab3').addClass('slds-hide');
+		        ////alert("Tab-3 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#rsfull').removeClass('slds-active');
+		        $('#rsfull a').attr('aria-selected', 'false');
+		        $('#rsfull-tab4').removeClass('slds-show');
+		        $('#rsfull-tab4').addClass('slds-hide');
+		        ////alert("Tab-4 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#mafull').removeClass('slds-active');
+		        $('#mafull a').attr('aria-selected', 'false');
+		        $('#mafull-tab5').removeClass('slds-show');
+		        $('#mafull-tab5').addClass('slds-hide');
+		 	} else if(hash == '#tab2Full') {
+		 		$('#ccfull').addClass('slds-active');
+		        $('#ccfull a').attr('aria-selected', 'true');
+		        $('#ccfull-tab2').addClass('slds-show');
+		        $('#ccfull-tab2').removeClass('slds-hide');
+		        
+		
+		        $('#jcfull').removeClass('slds-active');
+		        $('#jcfull a').attr('aria-selected', 'false');
+		        $('#jcfull-tab1').removeClass('slds-show');
+		        $('#jcfull-tab1').addClass('slds-hide');
+		        
+		        
+		        $('#gsfull').removeClass('slds-active');
+		        $('#gsfull a').attr('aria-selected', 'false');
+		        $('#gsfull-tab3').removeClass('slds-show');
+		        $('#gsfull-tab3').addClass('slds-hide');
+		        
+		        
+		        $('#rsfull').removeClass('slds-active');
+		        $('#rsfull a').attr('aria-selected', 'false');
+		        $('#rsfull-tab4').removeClass('slds-show');
+		        $('#rsfull-tab4').addClass('slds-hide');
+		        
+		        $('#mafull').removeClass('slds-active');
+		        $('#mafull a').attr('aria-selected', 'false');
+		        $('#mafull-tab5').removeClass('slds-show');
+		        $('#mafull-tab5').addClass('slds-hide');
+		 	} else if(hash == '#tab3Full') {
+		 		$('#gsfull').addClass('slds-active');
+		        $('#gsfull a').attr('aria-selected', 'true');
+		        $('#gsfull-tab3').addClass('slds-show');
+		        $('#gsfull-tab3').removeClass('slds-hide');
+		        ////alert("active, aria-selected:true. Now Show");
+		
+		        $('#ccfull').removeClass('slds-active');
+		        $('#ccfull a').attr('aria-selected', 'false');
+		        $('#ccfull-tab2').removeClass('slds-show');
+		        $('#ccfull-tab2').addClass('slds-hide');
+		        ////alert("Tab-1 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#jcfull').removeClass('slds-active');
+		        $('#jcfull a').attr('aria-selected', 'false');
+		        $('#jcfull-tab1').removeClass('slds-show');
+		        $('#jcfull-tab1').addClass('slds-hide');
+		        ////alert("Tab-3 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#rsfull').removeClass('slds-active');
+		        $('#rsfull a').attr('aria-selected', 'false');
+		        $('#rsfull-tab4').removeClass('slds-show');
+		        $('#rsfull-tab4').addClass('slds-hide');
+		        ////alert("Tab-4 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#mafull').removeClass('slds-active');
+		        $('#mafull a').attr('aria-selected', 'false');
+		        $('#mafull-tab5').removeClass('slds-show');
+		        $('#mafull-tab5').addClass('slds-hide');
+		 	} else if(hash == '#tab4Full') {
+		 		$('#rsfull').addClass('slds-active');
+		        $('#rsfull a').attr('aria-selected', 'true');
+		        $('#rsfull-tab4').addClass('slds-show');
+		        $('#rsfull-tab4').removeClass('slds-hide');
+		        ////alert("active, aria-selected:true. Now Show");
+		
+		        $('#ccfull').removeClass('slds-active');
+		        $('#ccfull a').attr('aria-selected', 'false');
+		        $('#ccfull-tab2').removeClass('slds-show');
+		        $('#ccfull-tab2').addClass('slds-hide');
+		        ////alert("Tab-1 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#jcfull').removeClass('slds-active');
+		        $('#jcfull a').attr('aria-selected', 'false');
+		        $('#jcfull-tab1').removeClass('slds-show');
+		        $('#jcfull-tab1').addClass('slds-hide');
+		        ////alert("Tab-3 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#gsfull').removeClass('slds-active');
+		        $('#gsfull a').attr('aria-selected', 'false');
+		        $('#gsfull-tab3').removeClass('slds-show');
+		        $('#gsfull-tab3').addClass('slds-hide');
+		        ////alert("Tab-4 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#mafull').removeClass('slds-active');
+		        $('#mafull a').attr('aria-selected', 'false');
+		        $('#mafull-tab5').removeClass('slds-show');
+		        $('#mafull-tab5').addClass('slds-hide');
+		 	} else if(hash == '#tab5Full') {
+		 		$('#mafull').addClass('slds-active');
+		        $('#mafull a').attr('aria-selected', 'true');
+		        $('#mafull-tab5').addClass('slds-show');
+		        $('#mafull-tab5').removeClass('slds-hide');
+		        ////alert("active, aria-selected:true. Now Show");                        
+		        
+		        ////alert("clicked.");
+		        $('#rsfull').removeClass('slds-active');
+		        $('#rsfull a').attr('aria-selected', 'false');
+		        $('#rsfull-tab4').removeClass('slds-show');
+		        $('#rsfull-tab4').addClass('slds-hide');
+		        ////alert("active, aria-selected:true. Now Show");
+		
+		        $('#ccfull').removeClass('slds-active');
+		        $('#ccfull a').attr('aria-selected', 'false');
+		        $('#ccfull-tab2').removeClass('slds-show');
+		        $('#ccfull-tab2').addClass('slds-hide');
+		        ////alert("Tab-1 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#jcfull').removeClass('slds-active');
+		        $('#jcfull a').attr('aria-selected', 'false');
+		        $('#jcfull-tab1').removeClass('slds-show');
+		        $('#jcfull-tab1').addClass('slds-hide');
+		        ////alert("Tab-3 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#gsfull').removeClass('slds-active');
+		        $('#gsfull a').attr('aria-selected', 'false');
+		        $('#gsfull-tab3').removeClass('slds-show');
+		        $('#gsfull-tab3').addClass('slds-hide');
+		 	} else if(hash == '#close') {
+		 		$('#jcfull').addClass('slds-active');
+		        $('#jcfull a').attr('aria-selected', 'true');
+		        $('#jcfull-tab1').addClass('slds-show');
+		        $('#jcfull-tab1').removeClass('slds-hide');
+		        ////alert("active, aria-selected:true. Now Show");
+		
+		        $('#ccfull').removeClass('slds-active');
+		        $('#ccfull a').attr('aria-selected', 'false');
+		        $('#ccfull-tab2').removeClass('slds-show');
+		        $('#ccfull-tab2').addClass('slds-hide');
+		        ////alert("Tab-1 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#gsfull').removeClass('slds-active');
+		        $('#gsfull a').attr('aria-selected', 'false');
+		        $('#gsfull-tab3').removeClass('slds-show');
+		        $('#gsfull-tab3').addClass('slds-hide');
+		        ////alert("Tab-3 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#rsfull').removeClass('slds-active');
+		        $('#rsfull a').attr('aria-selected', 'false');
+		        $('#rsfull-tab4').removeClass('slds-show');
+		        $('#rsfull-tab4').addClass('slds-hide');
+		        ////alert("Tab-4 nonactive, aria-selected:false. Do Not Show");
+		        
+		        $('#mafull').removeClass('slds-active');
+		        $('#mafull a').attr('aria-selected', 'false');
+		        $('#mafull-tab5').removeClass('slds-show');
+		        $('#mafull-tab5').addClass('slds-hide');
+		 	}
+		 	
+		      $('#ccfull').on('click', function(){
+		            
+		            
+		            $('#ccfull').addClass('slds-active');
+		            $('#ccfull a').attr('aria-selected', 'true');
+		            $('#ccfull-tab2').addClass('slds-show');
+		            $('#ccfull-tab2').removeClass('slds-hide');
+		            
+		    
+		            $('#jcfull').removeClass('slds-active');
+		            $('#jcfull a').attr('aria-selected', 'false');
+		            $('#jcfull-tab1').removeClass('slds-show');
+		            $('#jcfull-tab1').addClass('slds-hide');
+		            
+		            
+		            $('#gsfull').removeClass('slds-active');
+		            $('#gsfull a').attr('aria-selected', 'false');
+		            $('#gsfull-tab3').removeClass('slds-show');
+		            $('#gsfull-tab3').addClass('slds-hide');
+		            
+		            
+		            $('#rsfull').removeClass('slds-active');
+		            $('#rsfull a').attr('aria-selected', 'false');
+		            $('#rsfull-tab4').removeClass('slds-show');
+		            $('#rsfull-tab4').addClass('slds-hide');
+		            
+		            $('#mafull').removeClass('slds-active');
+		            $('#mafull a').attr('aria-selected', 'false');
+		            $('#mafull-tab5').removeClass('slds-show');
+		            $('#mafull-tab5').addClass('slds-hide');
+		            ////alert("Tab-5 nonactive, aria-selected:false. Do Not Show");
+		            
+		        });
+       		
+       		
+       		
+			//alert('AccountId = ' + AccountId);
+			$("#datepicker").datepicker();
+			$('#employmentHistoryTable').hide();
+			$('#singleEmpHistory').hide();
+			$('#addEmpHistory').hide();
+			$("[id*='bookButtonDiv']").css('display', 'none');
+			$("[id*='reasonDiv']").css('display', 'none');
+			$("[id*='TimeDiv']").css('display', 'none');
+			/*document.getElementById('bookButtonDiv').style.display = "none";
+			document.getElementById('reasonDiv').style.display = "none";
+			document.getElementById('TimeDiv').style.display = "none";*/
+			hideProcessingDiv();
+			UrlAccId = "{!$CurrentPage.parameters.accId}";
+			
+			//alert('UrlAccId = ' + UrlAccId);
+           $('#resetDiv').hide();
+           $('#forgetDiv').hide();
+           $('#resetHeading').hide();
+           $('#forgetHeading').hide();
+           $('#errArea').hide();
+           screenSize = $(document).width();
+           
+           //alert('Screen size is = ' + screenSize);
+           //alert('Loaded');
+           var checkKey = 'eHbMgHpPXLU98Sn9a25t1g==';
+           var sessionExist = $.session.get(checkKey);
+           //alert(UrlAccId);
+           if(sessionExist != undefined && (UrlAccId != null && UrlAccId != '') ) {
+           		//alert('session Exists');
+           		if(screenSize >= 1024) {
+          			$('#fstabs').show();
+          		} else if(screenSize >= 768 && screenSize < 1024) {
+          			$('#mstabs').show();
+          		} else {
+          			$('#sstabs').show();
+          		}
+          		$('#mainLogin').hide();
+          		document.getElementById('mediaAll').disabled=false;
+           } else {
+           		$('#mainLogin').show();
+           		$('#logout').hide();
+           		$('#fstabs').hide();
+           		$('#mstabs').hide();
+           		$('#sstabs').hide();
+           		$.session.clear();
+           		document.getElementById('mediaAll').disabled=true;
+           }
+       });
+       
+		/*$(".modal").on("shown.bs.modal", function()  { // any time a modal is shown
+		    var urlReplace = "#" + $(this).attr('id'); // make the hash the id of the modal shown
+		    history.pushState(null, null, urlReplace); // push state that hash into the url
+		  });
+
+		  // If a pushstate has previously happened and the back button is clicked, hide any modals.
+		  $(window).on('popstate', function() { 
+		    $(".modal").modal('hide');
+		  });*/
+       
+       function reloadTheFullScreen(screenWidth) {
+       		//alert('Reload');
+       		//$('#screenSizeDiv').load('http://dev-ucfb.cs86.force.com/ucfb');
+       		if(screenWidth >= 1024) {
+       			$('#fstabs').hide().fadeIn('fast');
+       			//alert('full='+screenWidth);
+       		} else if(screenWidth >= 768 && screenWidth < 1024) {
+       			$('#mstabs').hide().fadeIn('fast');
+       			//alert('medium='+screenWidth);
+       		} else {
+       			$('#sstabs').hide().fadeIn('fast');
+       			//alert('small='+screenWidth);
+       		}
+       		//alert('size='+screenWidth);
+       		
+       }       
+       
+       function showProcessingDiv() {
+       		$('#processingDiv').css('display', 'block');
+       }
+       
+       function hideProcessingDiv() {
+       		$('#processingDiv').css('display', 'none');
+       }
+       
+       $("#login-button").click(function() {
+           //alert('Button Clicked');
+           showProcessingDiv();
+           usernameEntered = document.getElementById('username').value;
+           passwordEntered = document.getElementById('password').value;
+           //alert('usernameEntered=' + usernameEntered);
+           //validateEmail();
+           checkEmailExists(usernameEntered);
+       });
+       
+       $("#goBack").click(function() {
+       		//alert('GoBack');
+       		$('#loginDiv').show();
+            $('#forgetDiv').hide();
+            $('#loginHeading').show();
+            $('#forgetHeading').hide();
+            $('#resetDiv').hide();
+            $('#resetHeading').hide();
+       });
+       
+       $("#logout").click(function() {
+       		//alert(mainSiteUrl);
+       		showProcessingDiv();
+       		$.session.clear();
+       		$('#logout').hide();
+       		hideProcessingDiv();
+       		//alert(window.location.href);
+       		window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb';
+       		//alert(window.location.href+'->'+mainSiteUrl);
+       		//window.location.href = mainSiteUrl;
+       });
+       
+       
+       function validateEmail() {
+           var re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm;
+           if(usernameEntered == '' || !re.test(usernameEntered)) {
+               //alert('Please Enter correct Email');
+               $('#errArea').show();
+               $('#errMsg').html('{!$Label.No_Record_Found}');
+               hideProcessingDiv();
+           } else {
+           		//alert('Email format is correct');
+               checkEmailExists(usernameEntered);
+           }
+       }
+       
+       function checkEmailExists(usernameEntered) {
+       	//alert('Inside checkEmailExists');
+           UCFBWithLoginController.findEmailAddress(usernameEntered, function(result, event) {
+               if (event.status) {
+                   //alert('result = ' + result);
+                   if(result != null && result != 'Duplicate' && result != 'Expired') {
+                       //alert('Email found');
+                       AccountId = result;
+                       //alert('AccountId = ' + AccountId);
+                       comparePasswordEmail(result);
+                   } else if(result == 'Duplicate') {
+                   		$('#errArea').show();
+	               		$('#errMsg').html('{!$Label.Duplicate_record_found}');
+	               		hideProcessingDiv();
+                   } else if(result == 'Expired') {
+                   		$('#errArea').show();
+	               		$('#errMsg').html('{!$Label.portal_no_longer_availble}');
+	               		hideProcessingDiv();
+                   } else {
+                   		checkUCFBIdExists(usernameEntered);
+                   }
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function checkUCFBIdExists(usernameEntered) {
+       	//alert('Inside checkEmailExists');
+           UCFBWithLoginController.findUCFBId(usernameEntered, function(result, event) {
+               if (event.status) {
+                   //alert('result = ' + result);
+                   if(result != null) {
+                       //alert('Email found');
+                       AccountId = result;
+                       //alert('AccountId = ' + AccountId);
+                       comparePasswordUcfb(result);
+                   } else {
+                   		//checkUCFBIdExists(usernameEntered);
+	                   	$('#errArea').show();
+	               		$('#errMsg').html('{!$Label.No_Record_Found}');
+	               		hideProcessingDiv();
+                       //alert('Email not found');
+                   }
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       
+       function checkFirstTimeLogin(conId) {
+           UCFBWithLoginController.checkFirstTimeLoginOrNot(conId, function(result, event) {
+               if (event.status) {
+                   //alert('checkFirstTimeLogin = ' + result);
+                   if(result == true) {
+                       $('#loginDiv').hide();
+                       $('#forgetDiv').hide();
+                       $('#loginHeading').hide();
+                       $('#forgetHeading').hide();
+                       $('#resetDiv').show();
+                       $('#resetHeading').show();
+                       hideProcessingDiv();
+                   } else {
+                   		$('body').css('display','none');
+                   		if(screenSize >= 1024) {
+                   			$('#fstabs').show();
+                   		} else if(screenSize >= 768 && screenSize < 1024) {
+                   			$('#mstabs').show();
+                   		} else {
+                   			$('#sstabs').show();
+                   		}
+                   		$('#loginDiv').hide();
+                   		$('#mainLogin').hide();
+                   		$('#loginHeading').hide();
+                   		$('#mainLogin').hide();
+                   		$('#logout').show();
+                   		var key = 'eHbMgHpPXLU98Sn9a25t1g==';
+                   		var value= 'kcr5WLZ+qfKbI0NSA/eTgg==';
+                   		$.session.set(key,value);
+                   		AccountId = conId;
+                   		UrlAccountId = AccountId;
+                   		UrlAccId = conId;
+                   		createLoginHistory();
+                   		document.getElementById('mediaAll').disabled = false;
+                   		//alert('AccountId Before Reload = ' + AccountId);
+                   		window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+AccountId;
+                   		//window.location.href = mainSiteUrl+'?accId='+AccountId;
+                   		hideProcessingDiv();
+                   }
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function createLoginHistory() {
+       		//alert('createLoginHistory');
+       		UCFBWithLoginController.createLoginHistoryRecord(UrlAccId, function(result, event) {
+               if (event.status) {
+                   consol.log('Login History Success Created');
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function createLoginHistoryFailed(conId, failReason) {
+       		//alert('createLoginHistoryFailed = ' + failReason);
+       		UCFBWithLoginController.createLoginHistoryRecordFailed(conId, failReason, function(result, event) {
+               if (event.status) {
+                   consol.log('Login History Failed Created');
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function comparePasswordEmail(conId) {
+           UCFBWithLoginController.decrypt(conId, function(result, event) {
+               if (event.status) {
+                   if(passwordEntered == result) {
+                       //alert('Password Matched');
+                       checkStatusOfAccountEmail(conId);
+                       //checkFirstTimeLogin(conId);
+                   } else {
+                   		createLoginHistoryFailed(conId, 'Wrong Password Entered.');
+                   		$('#errArea').show();
+               			$('#errMsg').html('{!$Label.Wrong_Password}');
+               			hideProcessingDiv();
+                       //alert('You Entered wrong Password');
+                   }
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function comparePasswordUcfb(conId) {
+           UCFBWithLoginController.decrypt(conId, function(result, event) {
+               if (event.status) {
+                   if(passwordEntered == result) {
+                       //alert('Password Matched');
+                       //checkFirstTimeLogin(conId);
+                       checkStatusOfAccountUcfb(conId);
+                   } else {
+                   		createLoginHistoryFailed(conId, 'Wrong Password Entered.');
+                   		$('#errArea').show();
+               			$('#errMsg').html('{!$Label.Wrong_Password}');
+               			hideProcessingDiv();
+                       //alert('You Entered wrong Password');
+                   }
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function checkStatusOfAccountEmail(conId) {
+           UCFBWithLoginController.statusOfAccount(conId, function(result, event) {
+               if (event.status) {
+                   if(result == 'Graduated') {
+                       //alert('Password Matched');
+                       //checkStatusOfAccount(conId);
+                       isGraduated = true;
+                       checkFirstTimeLogin(conId);
+                   } else if (result == 'Active'){
+                   		createLoginHistoryFailed(conId, 'Is Active but trying to login with Email.');
+                   		$('#errArea').show();
+               			$('#errMsg').html('{!$Label.Login_with_UCFBId}');
+               			hideProcessingDiv();
+                       //alert('You Entered wrong Password');
+                   } else {
+                   		$('#errArea').show();
+               			$('#errMsg').html('{!$Label.Not_Active_Or_Graduated}');
+               			hideProcessingDiv();
+                   }
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function checkStatusOfAccountUcfb(conId) {
+           UCFBWithLoginController.statusOfAccount(conId, function(result, event) {
+               if (event.status) {
+               	//alert('RESULT = ' + result);
+                   if(result == 'Active') {
+                       //alert('Password Matched');
+                       //checkStatusOfAccount(conId);
+                       isActive = true;
+                       checkFirstTimeLogin(conId);
+                   } else if (result == 'Graduated'){
+                   		createLoginHistoryFailed(conId, 'Is Graduated but trying to login with UCFB Id.');
+                   		$('#errArea').show();
+               			$('#errMsg').html('{!$Label.Login_with_emailId}');
+               			hideProcessingDiv();
+                       //alert('You Entered wrong Password');
+                   } else {
+                   		$('#errArea').show();
+               			$('#errMsg').html('{!$Label.Not_Active_Or_Graduated}');
+               			hideProcessingDiv();
+                   }
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+
+       $("#reset-button").click(function() {
+           //alert('Button Clicked');
+           showProcessingDiv();
+           newPasswordEntered = document.getElementById('newPassword').value;
+           newConfirmPasswordEntered = document.getElementById('confirmNewPassword').value;
+           //alert('newPasswordEntered=' + newPasswordEntered);
+           checkEquality();
+       });
+       
+       function checkEquality() {
+           if(newPasswordEntered != undefined || newPasswordEntered.trim() != '') {
+               if(newPasswordEntered.trim() == newConfirmPasswordEntered.trim()) {
+                   //alert('Validated');
+                   resetThePassword(newPasswordEntered);
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html('{!$Label.PasswordNotMatch}');
+               		hideProcessingDiv();
+                   //alert('Passords doesn\'t Macth');
+               }
+           } else {
+           		$('#errArea').show();
+               	$('#errMsg').html('{!$Label.Empty_Password}');
+               	hideProcessingDiv();
+               //alert('Password Empty');
+           }
+       }
+       
+       function resetThePassword(newPasswordEntered) {
+           UCFBWithLoginController.encrypt(newPasswordEntered, function(result, event) {
+               if (event.status) {
+                   setTheNewPassword(result);
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function setTheNewPassword(encryptedPassword) {
+           UCFBWithLoginController.setChangePassword(AccountId, encryptedPassword, function(result, event) {
+               if (event.status) {
+                   //alert('Password Changed');
+                   hideProcessingDiv();
+                   $('#errArea').show();
+                   $('#errMsg').html('<span style="color: green;">{!$Label.Passwordsuccessful}</span>');
+                   location.reload();
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       $("#forgetPasswordOnLogin").click(function() {
+           $('#loginDiv').hide();
+           $('#forgetDiv').show();
+           $('#loginHeading').hide();
+           $('#forgetHeading').show();
+           $('#resetDiv').hide();
+           $('#resetHeading').hide();
+       });
+       
+       $("#forget-button").click(function() {
+           //alert('Forget Password Button Clicked');
+           showProcessingDiv();
+           forgetUserNameEntered  = document.getElementById('forgetUsername').value;
+           checkEmailExistsInDB(forgetUserNameEntered);
+       });
+       
+       function checkEmailExistsInDB(forgetUserNameEntered) {
+       		UCFBWithLoginController.findEmailAddress(forgetUserNameEntered, function(result, event) {
+               if (event.status) {
+                   //alert('result = ' + result);
+                   if(result != null) {
+                       //alert('Email found');
+                       AccountId = result;
+                       //alert('AccountId = ' + AccountId);
+                       checkForgetAccountStatusEmail(result);
+                   } else {
+                   		checkForgotUCFBIdExists(forgetUserNameEntered);
+	                   	//$('#errArea').show();
+	               		//$('#errMsg').html('Email is not found in the Database!!!');
+	               		//hideProcessingDiv();
+                       //alert('Email not found');
+                   }
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function checkForgotUCFBIdExists(forgetUserNameEntered) {
+       	//alert('Inside checkEmailExists');
+           UCFBWithLoginController.findUCFBId(forgetUserNameEntered, function(result, event) {
+               if (event.status) {
+                   //alert('result = ' + result);
+                   if(result != null) {
+                       //alert('Email found');
+                       AccountId = result;
+                       //alert('AccountId = ' + AccountId);
+                       checkForgetAccountStatusUcfb(result);
+                   } else {
+                   		//checkUCFBIdExists(usernameEntered);
+	                   	$('#errArea').show();
+	               		$('#errMsg').html('{!$Label.usernameNotFound}');
+	               		hideProcessingDiv();
+                       //alert('Email not found');
+                   }
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function checkForgetAccountStatusEmail(conId) {
+           UCFBWithLoginController.statusOfAccount(conId, function(result, event) {
+               if (event.status) {
+                   if(result == 'Graduated') {
+                       //alert('Password Matched');
+                       //checkStatusOfAccount(conId);
+                       isGraduated = true;
+                       //checkFirstTimeLogin(conId);
+                       setThePasswordToDefault(conId);
+                   } else if (result == 'Active'){
+                   		$('#errArea').show();
+               			$('#errMsg').html('{!$Label.Login_with_UCFBId}');
+               			hideProcessingDiv();
+                       //alert('You Entered wrong Password');
+                   } else {
+                   		$('#errArea').show();
+               			$('#errMsg').html('{!$Label.Not_Active_Or_Graduated}');
+               			hideProcessingDiv();
+                   }
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function checkForgetAccountStatusUcfb(conId) {
+           UCFBWithLoginController.statusOfAccount(conId, function(result, event) {
+               if (event.status) {
+               	//alert('RESULT = ' + result);
+                   if(result == 'Active') {
+                       //alert('Password Matched');
+                       //checkStatusOfAccount(conId);
+                       isActive = true;
+                       //checkFirstTimeLogin(conId);
+                       setThePasswordToDefault(conId);
+                   } else if (result == 'Graduated'){
+                   		$('#errArea').show();
+               			$('#errMsg').html('{!$Label.Login_with_emailId}');
+               			hideProcessingDiv();
+                       //alert('You Entered wrong Password');
+                   } else {
+                   		$('#errArea').show();
+               			$('#errMsg').html('{!$Label.Not_Active_Or_Graduated}');
+               			hideProcessingDiv();
+                   }
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function setThePasswordToDefault(conId) {
+           UCFBWithLoginController.setPasswordToDefault(conId, function(result, event) {
+               if (event.status) {
+                   //alert('Password Set To Default');
+                   hideProcessingDiv();
+                   $('#errArea').show();
+                   if(isActive) {
+                   		$('#errMsg').html('{!$Label.Password_sent_to_Mail}');
+                   } else {
+                   		$('#errMsg').html('{!$Label.Password_sent_to_Mail}' + forgetUserNameEntered + '.');
+                   }
+               	   
+                   location.reload();
+               } else {
+               		$('#errArea').show();
+               		$('#errMsg').html(event.message);
+               		hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+       
+       function generateApplicationObj(appDesc, appJnC, appAcc) {
+       		//alert('In function genrateApplicationObj');
+       		UCFBWithLoginController.createApplicationObj(appDesc, appJnC, appAcc, function(result, event) {
+               if (event.status) {
+               		//alert('Deleted');
+               		//location.reload();
+               		//window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId;
+                   //alert('Application Object Created');
+                   //alert('result = ' + result);
+               } else {
+               		//$('#errArea').show();
+               		//$('#errMsg').html(event.message);
+               		//hideProcessingDiv();
+                   alert(event.message);
+               }
+           });
+       }
+       
+       function deleteTheRegistrationNow(regId) {
+       		showProcessingDiv();
+       		/*swal({
+       			title: "Are you sure?",
+       			text: "You will have to Register again!!!",
+       			type: "warning",
+       			showCancelButton: true,
+       			confirmButtonColor: "#DD6B55",
+       			confirmButtonText: "Yes, delete it!",
+       			closeOnConfirm: false
+       		}, function() {
+       			swal("Deleted!", "Your Registration has been removed now.", "success");*/
+       			UCFBWithLoginController.deleteTheReg(regId, UrlAccId, function(result, event) {
+	               if (event.status) {
+	               		//alert('Deleted');
+	               		location.reload();
+	               		//window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId;
+	                   //alert('Application Object Created');
+	                   //alert('result = ' + result);
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		hideProcessingDiv();
+	                   alert(event.message);
+	               }
+	           });
+       		//});
+       
+       		
+       }
+       
+       function deleteTheApplicationNow(apId) {
+			showProcessingDiv();
+       			UCFBWithLoginController.deleteTheApp(apId, UrlAccId, function(result, event) {
+	               if (event.status) {
+	               		//alert('Deleted');
+	               		location.reload();
+	                   //alert('Application Object Created');
+	                   //alert('result = ' + result);
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		hideProcessingDiv();
+	                   alert(event.message);
+	               }
+	           });
+       		//});
+       
+       		
+       }
+       
+       
+        function deleteBookingNow(bookId) {
+        var AccId = "{!$CurrentPage.parameters.accId}";
+			showProcessingDiv();
+       			UCFBWithLoginController.deleteTheBook(bookId, AccId, function(result, event) {
+	               if (event.status) {
+	               		//alert('Deleted');
+	               		location.reload();
+	               		createBookingHistory(bookId, AccId);
+	                   //alert('Application Object Created');
+	                   //alert('result = ' + result);
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		hideProcessingDiv();
+	                   alert(event.message);
+	               }
+	           });
+       		//});
+       
+       		
+       }
+       
+       
+       
+       function deleteTheApplicationOfCourseNow(regId) {
+       		showProcessingDiv();
+       		/*swal({
+       			title: "Are you sure?",
+       			text: "You will have to Register again!!!",
+       			type: "warning",
+       			showCancelButton: true,
+       			confirmButtonColor: "#DD6B55",
+       			confirmButtonText: "Yes, delete it!",
+       			closeOnConfirm: false
+       		}, function() {
+       			swal("Deleted!", "Your Registration has been removed now.", "success");*/
+       			UCFBWithLoginController.deleteTheComp(regId, UrlAccId, function(result, event) {
+       				//alert('regId = ' + regId);
+	               if (event.status) {
+	               		//alert('Deleted');
+	               		location.reload();
+	               		//hideProcessingDiv();
+	               		//$('#ccfull-tab2').load(document.'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId +  ' #ccfull-tab2');
+	               		//$('#ccfull').load('http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId + ' #ccfull-tab2');
+	               		//window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId;
+	                   //alert('Application Object Created');
+	                   //alert('result = ' + result);
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		hideProcessingDiv();
+	                   alert(event.message);
+	               }
+	           });
+       		//});
+       
+       		
+       }
+
+       function createBookingHistory(bookId, AccId) {
+       		//showProcessingDiv();
+       		UCFBWithLoginController.createBookingHistoryObj(bookId, AccId, function(result, event) {
+       			if (event.status) {
+       				//alert('History Created');
+       				consol.log('Booking History Success Created');
+       			} else {
+       				alert(event.message);
+       			}
+       		});
+       }
+       
+       function createAttachmentOnApplication(att) {
+       		UCFBWithLoginController.createAttachmentOnApplicationObj(att, function(result, event) {
+               if (event.status) {
+                   //alert('Attachment on Application Object Created');
+               } else {
+               		//$('#errArea').show();
+               		//$('#errMsg').html(event.message);
+               		//hideProcessingDiv();
+                   //alert(event.message);
+               }
+           });
+       }
+
+       function clearErrorMsg() {
+       		//document.getElementById("messagebox").innerHTML = "<span class='upload-path'>...</span>";
+       		$('.ErrorColor').hide();
+       		$('.upload-path').show();
+       		$('.upload-path').text('...');
+       }
+
+       function resetMessageBox() {
+			$('.ErrorColor').hide();
+       		$('.upload-path').show();
+       }
+
+       function showInText() {
+       		alert('Running');
+       		var textInHtml = $('.showInTextClass').text();
+       		alert(textInHtml);
+       }
+       
+       
+       var attachmentPdf;
+       var attachmentName;
+       
+       function uploadFile(comapnyId) {
+          //alert('In Upload File Function');
+          //alert(comapnyId);
+          //showProcessingDiv();
+          
+           var input = document.getElementById("file-input");
+           var filesToUpload = input.files;
+           //alert('Still Running 1 = ' + filesToUpload + ' = ' + input);
+			
+			//alert('filesToUpload---' + filesToUpload.length);
+			
+			if (filesToUpload.length < 1) {
+				//document.getElementsByClass("").innerHTML = "<span style='color: #ff0000;'>Please Select a file first<span class='upload-path'>...</span></span>";
+				$('.upload-path').hide();
+				$('.ErrorColor').show();
+				$('.ErrorColor').text('{!$Label.selectFileFirst}');
+			} else {
+				for(var i = 0, f; f = filesToUpload[i]; i++)
+           {
+           	//alert('filesToUpload-----' + filesToUpload);
+            var reader = new FileReader();
+        
+            // Keep a reference to the File in the FileReader so it can be accessed in callbacks
+            reader.file = f;
+
+            //alert(reader.file);
+            reader.onload = function(e)
+            {
+            	try {
+            	
+            	attachmentPdf = window.btoa(e.target.result);
+            	
+            	
+            	//alert('attachmentPdf=' + attachmentPdf);
+            	var attName = this.file.name;
+            	var attContentType = this.file.type;
+            	//alert(attName + ' = ' + attContentType);
+            	
+            	var appObjName = attName;
+            	var appObjDesc = document.getElementById("description").innerHTML;
+            	var appObjJnC = angular.element(document.getElementById('recordDiv')).scope().getRecordId();
+            	var appObjAcc = '{!$CurrentPage.parameters.accId}';
+	             var binary = "";
+	             var bytes = new Uint8Array(e.target.result);
+	             var length = bytes.byteLength;
+	           // alert('Running 1');
+	             for (var i = 0; i < length; i++)
+	             {	
+	              binary += String.fromCharCode(bytes[i]);
+	             }
+	            // alert('Running 2');
+	             
+	             attachmentPdf = window.btoa(binary);
+	        	
+	             var attBody = (new sforce.Base64Binary(binary)).toString();
+	            // alert(attBody);
+	             //var attBody = new Blob(binary, {type: attContentType});
+            	//alert('Running 3');        	
+            	if (appObjDesc == null || appObjDesc.trim() == "") {
+            	//alert('Running 5');
+	                //document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>Cover Letter Must not be Empty</span>";
+	                $('.upload-path').hide();
+	                $('.ErrorColor').show();
+					$('.ErrorColor').text('{!$Label.CoverLetterNotEmpty}');
+	                //hideProcessingDiv();
+	                return false;
+            	} else {
+            		//alert('Running 5');
+	            	UCFBWithLoginController.createApplicationObj(attName, attContentType, attachmentPdf, appObjName, appObjDesc, appObjJnC, appObjAcc, comapnyId, function(result, event) {
+		               if (event.status) {
+		                   document.getElementById("messagebox").innerHTML = "<span style='color: green;'>{!$Label.ApplicationSuccessful}</span>";
+		                   go(50);
+		               } else {
+		                   document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+		               }
+		           });
+            	}
+            	} catch(e) {
+            		//alert(e);
+            	}
+            	            };
+            reader.readAsArrayBuffer(f);
+           }
+			}
+        	
+           
+          }
+
+      /*var maxStringSize = 6000000;    //Maximum String size is 6,000,000 characters
+      var maxFileSize = 4350000;      //After Base64 Encoding, this is the max file size
+      var chunkSize = 950000;         //Maximum Javascript Remoting message size is 1,000,000 characters      
+      var fileSize;
+      var positionIndex;
+      
+
+       function uploadFile(comapnyId) {
+        
+          
+           var input = document.getElementById("file-input");
+           var filesToUpload = input.files;
+        
+           for(var i = 0, f; f = filesToUpload[i]; i++)
+           {
+            var reader = new FileReader();
+        
+            // Keep a reference to the File in the FileReader so it can be accessed in callbacks
+            reader.file = f;
+            
+            reader.onload = function(e)
+            {
+              try{
+                var attName = this.file.name;
+                var attContentType = this.file.type;
+                //alert(attName + ' = ' + attContentType);
+                
+                var appObjName = attName;
+                var appObjDesc = document.getElementById("description").innerHTML;
+                var appObjJnC = angular.element(document.getElementById('recordDiv')).scope().getRecordId();
+                var appObjAcc = '{!$CurrentPage.parameters.accId}';          
+               
+                 //ARUN START
+                  attachmentPdf = window.btoa(e.target.result);  //Base 64 encode the file before sending it
+                  positionIndex=0;
+                  fileSize = attachmentPdf.length;
+
+                  var attachmentBody = "";
+                  if(fileSize <= positionIndex + chunkSize) {
+                    attachmentBody = attachmentPdf.substring(positionIndex);                    
+                  } else {
+                    attachmentBody = attachmentPdf.substring(positionIndex, positionIndex + chunkSize);
+                  }
+                 //ARUN END
+               
+                if (appObjDesc == null || appObjDesc.trim() == "") {
+                //alert('Running 4');
+                    document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>Cover Letter Must not be Empty</span>";
+                    //hideProcessingDiv();
+                    return false;
+                } else {
+                  //alert('Running 55555');
+                  UCFBWithLoginController.createApplicationObj(attName, attContentType, attachmentBody, appObjName, appObjDesc, appObjJnC, appObjAcc, comapnyId, function(result, event) {
+                     if (event.status) {
+                         //alert('Application Object Created');
+                         //alert('result = ' + result);
+                         document.getElementById("messagebox").innerHTML = "<span style='color: green;'>Application Successfully Saved.</span>";
+                         //window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId';
+                         //hideProcessingDiv();
+                         go(50);
+                         //location.reload();
+                     } else {                      
+                         document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+                     }
+                 },
+                 {buffer: true, escape: true, timeout: 120000}
+                 );
+                }
+              } catch(e) {
+                alert(e);
+              }
+            };
+            reader.readAsBinaryString(f);
+           }
+        }*/
+          
+          
+          function reloadThePage() {
+          	location.reload();
+          }
+          
+          var selectedDate = null;
+          var allTimings = null;
+          var allTimingsBooked = null;
+          var allReasons = null;
+          /*-----------------------------------------Booking-----------------------------------------*/
+          
+          function todayminDate() {
+          		var today = new Date();
+				var returnDate = today.toISOString().substring(0, 10);
+				//alert(returnDate);
+			   return returnDate;
+          }
+          var idLast = '';
+          function showDate(event, d) {
+          		//alert($(event).attr('id'));
+          		idLast = $(event).attr('id');
+          		idLast = idLast.substr(idLast.length - 1);
+          		//alert(idLast);
+          		//alert(d);
+          		d = d.replace("string:","");
+          		var dateParts = d.split('/');
+          		//alert('dateParts='+dateParts);
+          		var dateYear = dateParts[2];
+          		//alert('dateYear='+dateYear);
+          		var dateMonth = dateParts[1] - 1;
+          		//alert('dateMonth='+dateMonth);
+          		var dateDate = dateParts[0];
+          		//alert('dateDate='+dateDate);
+          		var newDate = new Date(dateYear, dateMonth, dateDate);
+          		//alert('newDate='+newDate);
+          
+          		var today = new Date();
+          		//alert('today='+today);
+          		var dd = today.getDate();
+          		//alert('dd='+dd);
+          		var mm = today.getMonth();
+          		//alert('mm='+mm);
+          		var yyyy = today.getFullYear();
+          		//alert('yyyy='+yyyy);
+          		if(dd<10) {
+          			dd = '0'+dd;
+          		}
+          		if(mm<10) {
+          			mm = '0'+mm;
+          		}
+          		today = dd+'/'+mm+'/'+yyyy;
+          		var newToday = new Date(yyyy, mm, dd);
+          		//alert(d + '----' +newToday+ '-----' + today + '-----' + newDate);
+          		//alert(newDate.getDay());
+          		if(newDate < newToday) {	
+          			document.getElementById('bookButtonDiv'+idLast).style.display = "none";
+	          		document.getElementById('TimeDiv'+idLast).style.display = "none";
+	          		document.getElementById('reasonDiv'+idLast).style.display = "none";
+          			alert('You can not select the previous date.');
+          		} else if(newDate.getDay() == 0 || newDate.getDay() == 6) {
+          			document.getElementById('bookButtonDiv'+idLast).style.display = "none";
+	          		document.getElementById('TimeDiv'+idLast).style.display = "none";
+	          		document.getElementById('reasonDiv'+idLast).style.display = "none";
+          			alert('You can not select Saturday or Sunday.');
+          		} else {
+          			document.getElementById('bookButtonDiv'+idLast).style.display = "none";
+	          		document.getElementById('TimeDiv'+idLast).style.display = "none";
+	       			document.getElementById('reasonDiv'+idLast).style.display = "none";
+	       			selectedDate = d;
+	       			var AccId = "{!$CurrentPage.parameters.accId}";
+	       			UCFBWithLoginController.checkSelectedDateBookings(selectedDate, AccId, function(result, event) {
+		               if (event.status) {
+		                   //alert('Application Object Created');
+		                   //alert('result = ' + result);
+		                   //document.getElementById("messagebox").innerHTML = "<span style='color: green;'>Application Successfully Saved.</span>";
+		                   //window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId;
+		                   //location.reload();
+		                   //if(result == -1) {
+		                   	//	alert("Sorry, You are not allowed to book the meeting.");
+		                   //} else if(result >= 2) {
+		                   if(result >= 2) {
+		                   		alert("{!$Label.maxNumberBooking}")
+		                   } else {
+		                   		startGettingTimings();
+		                   }
+		                   //alert('allTimings=' + result);
+		                   //getTimingsBooked();
+		               } else {
+		               		//$('#errArea').show();
+		               		//$('#errMsg').html(event.message);
+		               		//hideProcessingDiv();
+		                   alert(event.message);
+		                   //hideProcessingDiv();
+		                   //document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+		               }
+		           });
+	       			
+	          		//alert(d);
+	          		
+	          		//document.getElementById('{!$Component.ReasonForm.dateHiddenField}').value = d;
+	          		//$('#dateHiddenField').val(d);
+	          		//alert(document.getElementById('{!$Component.ReasonForm.dateHiddenField}').value);
+	          		//passDateToController();
+	          		//$('#allTimings').load(document.URL +  ' #allTimings');
+	          		
+          		}
+          		
+          }
+          
+          function startGettingTimings() {
+          		UCFBWithLoginController.getAllTimingsList(function(result, event) {
+	               if (event.status) {
+	                   //alert('Application Object Created');
+	                   //alert('result = ' + result);
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: green;'>Application Successfully Saved.</span>";
+	                   //window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId;
+	                   //location.reload();
+	                   allTimings = result;
+	                   //alert('allTimings=' + result);
+	                   getTimingsBooked();
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		//hideProcessingDiv();
+	                   alert(event.message);
+	                   //hideProcessingDiv();
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+	               }
+	           });
+          }
+          
+          function getTimingsBooked() {
+          		//var ParsedDate = new Date(selectedDate).toUTCString();
+          		//alert('ParsedDate = ' + ParsedDate);
+          		//var from = selectedDate.split("-");
+          		//var checkDate = new Date(selectedDate[2], selectedDate[1] - 1, selectedDate[0]);
+          		UCFBWithLoginController.getAllTimingsBooked(selectedDate, UrlAccId, function(result, event) {
+	               if (event.status) {
+	               		allTimingsBooked = result;
+	               		//alert('allTimingsBooked=' + result);
+	               		populateSelectTimeOptions();
+	                   //alert('Application Object Created');
+	                   //alert('result = ' + result);
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: green;'>Application Successfully Saved.</span>";
+	                   //window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId;
+	                   //location.reload();
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		//hideProcessingDiv();
+	                   alert(event.message);
+	                   //hideProcessingDiv();
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+	               }
+	           });
+          }
+          
+          function populateSelectTimeOptions() {
+          		//alert('In Populate->'+idLast);
+          		var sel = document.getElementById('freeTimings'+idLast);
+          		//alert('sel='+sel);
+          		//alert(allTimingsBooked.length);
+          		document.getElementById('freeTimings'+idLast).options.length = 0;
+          		allTimingsBooked = jQuery.unique(allTimingsBooked);
+          		allTimingsBooked.sort();
+          		for(var i = 0; i < allTimingsBooked.length; i++) {
+          			//var testItem = "\""+allTimings[i]+"\"";
+          			//alert('allTimings[i]='+allTimings[i]);
+          			//alert(jQuery.inArray( allTimings[i], allTimingsBooked));
+          			/*for(var j=0; j<allTimingBooked.length;j++) {
+          				alert('in lopp');
+          				if(allTimings[i] == allTimingBooked[j]) {
+          					alert('found');
+          				} else {
+          					alert('not found');
+          				}
+          			}*/
+          			//if(jQuery.inArray(allTimings[i], allTimingsBooked) > 0) {
+          				var opt = document.createElement('option');
+          				opt.innerHTML = allTimingsBooked[i];
+          				opt.value = allTimingsBooked[i];
+          				sel.appendChild(opt);
+          			//}
+          		}
+          		getReasonOptions();
+          		//document.getElementById('freeTimings').style.display = "block";
+          		//document.getElementById('bookButtonDiv').style.display = "block";
+          		//document.getElementById('reasonDiv').style.display = "block";
+				//document.getElementById('TimeDiv').style.display = "block";
+          }
+          
+          function getReasonOptions() {
+          		UCFBWithLoginController.getAllReasonsList(function(result, event) {
+	               if (event.status) {
+	                   //alert('Application Object Created');
+	                   //alert('result = ' + result);
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: green;'>Application Successfully Saved.</span>";
+	                   //window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId;
+	                   //location.reload();
+	                   allReasons = result;
+	                   //alert('allTimings=' + result);
+	                   populateResonsList();
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		//hideProcessingDiv();
+	                   alert(event.message);
+	                   //hideProcessingDiv();
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+	               }
+	           });
+          }
+          
+          function populateResonsList() {
+          		var sel = document.getElementById('reasonforMeeting'+idLast);
+          		//alert('sel='+sel);
+          		//alert(allTimingsBooked.length);
+          		document.getElementById('reasonforMeeting'+idLast).options.length = 0;
+          		for(var i = 0; i < allReasons.length; i++) {
+          			//var testItem = "\""+allTimings[i]+"\"";
+          			//alert('allTimings[i]='+allTimings[i]);
+          			//alert(jQuery.inArray( allTimings[i], allTimingsBooked));
+          			/*for(var j=0; j<allTimingBooked.length;j++) {
+          				alert('in lopp');
+          				if(allTimings[i] == allTimingBooked[j]) {
+          					alert('found');
+          				} else {
+          					alert('not found');
+          				}
+          			}*/
+          			//if(jQuery.inArray(allTimings[i], allTimingsBooked) < 0) {
+          				var opt = document.createElement('option');
+          				opt.innerHTML = allReasons[i];
+          				opt.value = allReasons[i];
+          				sel.appendChild(opt);
+          			//}
+          		}
+          		//getReasonOptions();
+          		document.getElementById('freeTimings'+idLast).style.display = "block";
+          		document.getElementById('bookButtonDiv'+idLast).style.display = "block";
+          		document.getElementById('reasonDiv'+idLast).style.display = "block";
+				document.getElementById('TimeDiv'+idLast).style.display = "block";
+          }
+          
+          function validateTheMeetingPerDay() {
+          		var AccId = "{!$CurrentPage.parameters.accId}";
+          		
+          		UCFBWithLoginController.validateMettingsToday(AccId, function(result, event) {
+          			if(event.status) {
+          				//alert('total booking today = '+ result);
+          				if(result >= 2) {
+          					alert('{!$Label.forTheDayMaximum}')
+          				} else {
+          					bookTheMeeting();
+          				}
+          			} else {
+          				alert(event.message);
+          			}
+          		});
+          }
+          
+          function bookTheMeeting() {
+          		showProcessingDiv();
+          		var selectedTime = $( "#freeTimings"+idLast+" option:selected" ).text();
+          		var selectedReason = $( "#reasonforMeeting"+idLast+" option:selected" ).text();
+          		//alert(selectedTime);
+          		//alert('selectedTime=' + selectedTime);
+          		var AccId = "{!$CurrentPage.parameters.accId}";
+          		UCFBWithLoginController.bookMeetingCtrl(selectedDate, AccId, selectedTime, selectedReason, function(result, event) {
+	               if (event.status) {
+	               		//allTimingsBooked = result;
+	               		//alert('Booked');
+	               		location.reload();
+	               		//populateSelectTimeOptions();
+	                   //alert('Application Object Created');
+	                   //alert('result = ' + result);
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: green;'>Application Successfully Saved.</span>";
+	                   //window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId;
+	                   //location.reload();
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		//hideProcessingDiv();
+	                   alert(event.message);
+	                   //hideProcessingDiv();
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+	               }
+	           });
+          }
+          
+          var empHistoryList = null;
+          var empLast = '';
+          
+          function showEmpHistoryTable(event) {
+          		//alert('-->>>'+$(event).attr('id'));
+          		empLast = $(event).attr('id');
+          		empLast = empLast.substr(empLast.length - 1);
+          		getAllPicklistValues();
+          		$('#accountDetailsTable'+empLast).hide();
+          		$('#employmentHistoryTable'+empLast).show();
+          		UCFBWithLoginController.getAllEmploymentHistoryNew(UrlAccId, function(result, event) {
+          			//alert(result+'='+event.status);
+	               if (event.status) {
+	               		//alert('result='+result);
+	               		//if(result != null) {
+	               			empHistoryList = result;
+	               			//alert(empHistoryList);
+	               			populateEmpHistoryTable();
+	               		//}
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		//hideProcessingDiv();
+	                   alert(event.message);
+	                   //hideProcessingDiv();
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+	               }
+	           });
+          }
+          
+          function getAllPicklistValues() {
+          	  empIndustryList = null;
+	          empLevelList = null;
+	          empStatusList = null;
+	          empTypeList = null;
+	          empwantingList = null;
+          		UCFBWithLoginController.getAllIndustry(function(result, event) {
+	               if (event.status) {
+	               		//alert('result='+result);
+	               		if(result != null) {
+	               			empIndustryList = result;
+	               		}
+	               } else {
+	                   alert(event.message);
+	               }
+	           });
+	           UCFBWithLoginController.getAllEmploymentLevel(function(result, event) {
+	               if (event.status) {
+	               		//alert('result='+result);
+	               		if(result != null) {
+	               			empLevelList = result;
+	               		}
+	               } else {
+	                   alert(event.message);
+	               }
+	           });
+	           UCFBWithLoginController.getAllEmploymentStatus(function(result, event) {
+	               if (event.status) {
+	               		//alert('result='+result);
+	               		if(result != null) {
+	               			empStatusList = result;
+	               		}
+	               } else {
+	                   alert(event.message);
+	               }
+	           });
+	           UCFBWithLoginController.getAllEmploymentType(function(result, event) {
+	               if (event.status) {
+	               		//alert('result='+result);
+	               		if(result != null) {
+	               			empTypeList = result;
+	               		}
+	               } else {
+	                   alert(event.message);
+	               }
+	           });
+	           UCFBWithLoginController.getStillWantingWork(function(result, event) {
+	               if (event.status) {
+	               		//alert('result='+result);
+	               		if(result != null) {
+	               			empwantingList = result;
+	               		}
+	               } else {
+	                   alert(event.message);
+	               }
+	           });
+          }
+          
+          function populateEmpHistoryTable() {
+          		//alert('In populateEmpHistoryTable');          		
+          		var tab = document.getElementById('employmentHistoryTable'+empLast);
+          		//alert(tab);
+          		var rowEmp = '';
+          		if(empLast != 'S') {
+	          		if(empHistoryList != null) {
+		          		var rowEmp = '<tr><th colspan="6" style="text-align: center;"><u>All Appointment Histories</u></th></tr>'
+		      							+ '<tr><th>Company Name</th><th>Comapny Region</th><th>Job Title</th><th>Start Date</th><th>End Date</th><th style="text-align: center;">Actions</th></tr>'
+		      							+ '<tr>';
+		          		for(var i = 0; i < empHistoryList.length; i++) {
+		          			//alert(empHistoryList[i].AccountName);
+		          			//alert(moment(empHistoryList[i].StartDate).format("MM-DD-YYYY"));
+		          			rowEmp += '<td>' + empHistoryList[i].CompanyName + '</td>'
+		       							+ '<td>' + empHistoryList[i].CompanyRegion + '</td>'
+		       							+ '<td>' + empHistoryList[i].JobTitle + '</td>'
+		       							+ '<td>' + moment(empHistoryList[i].StartDate).format("DD-MM-YYYY") + '</td>'
+		       							+ '<td>' + moment(empHistoryList[i].EndDate).format("DD-MM-YYYY") + '</td>'
+		       							+ '<td>' + '<button type="button" class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="showThisEmpHistory(\''
+		          						+ empHistoryList[i].Id + '\')"><span class="glyphicon glyphicon-eye-open" style="padding:10px !important;"></span>'
+		          						+ 'View Employment History'
+		          						+ '</button>'
+		          						+ '<button type="button" class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="deleteThisEmpHistory(\''
+		          						+ empHistoryList[i].Id + '\')"><span class="glyphicon glyphicon-remove" style="padding:10px !important;"></span>Delete</button>'
+		          						+ '</td>'
+		       							+ '</tr>';
+		          			//rowEmp = '<button type="button" class="btn btn-primary">' + empHistoryList[i].AccountName + '</button>';
+		          			//alert('rowEmp='+rowEmp);
+		          			//tab.append(rowEmp);
+		          			//var opt = document.createElement('button');
+		          				//opt.innerHTML = empHistoryList[i].AccountName;
+		          				//opt.value = allReasons[i];
+		          				//alert('opt='+opt);
+		          		}
+		          	}
+	          		rowEmp += '<tr><td colspan="5" style="text-align: right;"><button type="button" class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="addTheEmpHistory()"><span class="glyphicon glyphicon-plus"  style="padding:10px !important;"></span>Add Employment History</button></td>';
+	          		rowEmp += '<td colspan="3" style="text-align: left;"><button type="button" class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="backToAccountDetails()"><span class="glyphicon glyphicon-arrow-left"  style="padding:10px !important;"></span>Go Back</button></td></tr>';
+	          	} else {
+	          		if(empHistoryList != null) {
+		          		var rowEmp = '<tr><th colspan="6" style="text-align: center;"><u>All Appointment Histories</u></th></tr>'
+		      							/*+ '<tr><th>Company Name</th><th>Comapny Region</th><th>Job Title</th><th>Start Date</th><th>End Date</th><th style="text-align: center;">Actions</th></tr>'*/
+		      							+ '<tr>';
+		      			//var rowEmp = '';
+		          		for(var i = 0; i < empHistoryList.length; i++) {
+		          			//alert(empHistoryList[i].AccountName);
+		          			//alert(moment(empHistoryList[i].StartDate).format("MM-DD-YYYY"));
+		          			rowEmp += '<td data-label="Company Name:">' + empHistoryList[i].CompanyName + '</td>'
+		       							+ '<td data-label="Company Region:">' + empHistoryList[i].CompanyRegion + '</td>'
+		       							+ '<td data-label="Job Title:">' + empHistoryList[i].JobTitle + '</td>'
+		       							+ '<td data-label="Start Date:">' + moment(empHistoryList[i].StartDate).format("DD-MM-YYYY") + '</td>'
+		       							+ '<td data-label="End Dte:">' + moment(empHistoryList[i].EndDate).format("DD-MM-YYYY") + '</td>'
+		       							+ '<td>' + '<button type="button"  class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="showThisEmpHistory(\''
+		          						+ empHistoryList[i].Id + '\')"><span class="glyphicon glyphicon-eye-open" style="padding:10px !important;"></span>'
+		          						+ 'View Employment History'
+		          						+ '</button>'
+		          						+ '<button type="button"  class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="deleteThisEmpHistory(\''
+		          						+ empHistoryList[i].Id + '\')"><span class="glyphicon glyphicon-remove" style="padding:10px !important;"></span>Delete</button>'
+		          						+ '</td>'
+		       							+ '</tr>';
+		          			//rowEmp = '<button type="button" class="btn btn-primary">' + empHistoryList[i].AccountName + '</button>';
+		          			//alert('rowEmp='+rowEmp);
+		          			//tab.append(rowEmp);
+		          			//var opt = document.createElement('button');
+		          				//opt.innerHTML = empHistoryList[i].AccountName;
+		          				//opt.value = allReasons[i];
+		          				//alert('opt='+opt);
+		          		}
+		          	}
+	          		rowEmp += '<tr><td colspan="3" style="text-align: right;"><button type="button"  class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="addTheEmpHistory()"><span class="glyphicon glyphicon-plus"  style="padding:10px !important;"></span>Add Employment History</button></td>';
+	          		rowEmp += '<td colspan="3" style="text-align: left;"><button type="button"  class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="backToAccountDetails()"><span class="glyphicon glyphicon-arrow-left"  style="padding:10px !important;"></span>Go Back</button></td></tr>';
+	          	}
+          		$('#employmentHistoryTable'+empLast).html(rowEmp);
+          		
+          		
+          }
+          
+          function deleteThisEmpHistory(empId) {
+          		UCFBWithLoginController.deleteEmpHistory(empId, function(result, event) {
+	               if (event.status) {
+	               		location.reload();
+	               } else {
+	                   alert(event.message);
+	               }
+	           });
+          }
+          
+          var currentEmpId = null;
+          var currentCompanyName = null;
+          var currentAccName = null;
+          var currentCompRegion = null;
+          var currentPostalCode = null;
+          var currentStartDate = null;
+          var currentEndDate = null;
+          var currentIndustry = null;
+          var currentEmploymentLevel = null;
+          var currentEmploymentStatus = null;
+          var currentEmploymentType = null;
+          var currentStillWantIndustry = null;
+          var currentJobTitle = null;
+          
+          var empIndustryList = null;
+          var empLevelList = null;
+          var empStatusList = null;
+          var empTypeList = null;
+          var empwantingList = null;
+          
+          function showThisEmpHistory(empId) {
+          		//alert('EmpId = ' + empId);
+          		$('#employmentHistoryTable'+empLast).hide();
+				$('#singleEmpHistory'+empLast).show();
+				$('#addEmpHistory'+empLast).hide();
+				var tab = document.getElementById('singleEmpHistory'+empLast);
+          		//alert(tab);
+          		var rowEmp = '';
+          		for(var i = 0; i < empHistoryList.length; i++) {
+          			//alert(empHistoryList[i].AccountName);
+          			if(empHistoryList[i].Id == empId) {
+          				
+          				
+	          			  currentEmpId = empHistoryList[i].Id;
+	          			  currentCompanyName = empHistoryList[i].CompanyName;
+	          			  //alert(currentCompanyName);
+				          currentAccName = empHistoryList[i].AccountName;
+				          currentCompRegion = empHistoryList[i].CompanyRegion;
+				          currentPostalCode = empHistoryList[i].PostalCode;
+				          currentStartDate = moment(empHistoryList[i].StartDate).format("DD-MM-YYYY");
+				          //alert(currentStartDate);
+				          currentEndDate = moment(empHistoryList[i].EndDate).format("DD-MM-YYYY");
+				          currentIndustry = empHistoryList[i].Industry;
+				          currentEmploymentLevel = empHistoryList[i].EmploymentLevel;
+				          currentEmploymentStatus = empHistoryList[i].EmploymentStatus.split('amp;').join('');
+				          currentEmploymentType = empHistoryList[i].EmploymentType;
+				          currentStillWantIndustry = empHistoryList[i].StillWantIndustry;
+				          currentJobTitle = empHistoryList[i].JobTitle;
+
+          				
+          				rowEmp += '<tr><th colspan="4" style="text-align: center;"><u>Employment History</u></th></tr>'
+          							+ '<tr><th>Company:</th><td>'+empHistoryList[i].CompanyName+'</td><th>Company Region:</th>'
+									+ '<td>'+empHistoryList[i].CompanyRegion+'</td></tr>'
+          							+ '<tr><th>Postal Code:</th><td>'+empHistoryList[i].PostalCode
+          							+ '<th>Start Date</th><td>' + moment(empHistoryList[i].StartDate).format("DD-MM-YYYY") + '</td>'
+       								+ '<tr><th>End Date</th><td>' + moment(empHistoryList[i].EndDate).format("DD-MM-YYYY") + '</td>'
+          							+ '<th>Industry:</th><td>'+empHistoryList[i].Industry
+          							+ '</td></tr><tr><th>Employment Level:</th><td>'+empHistoryList[i].EmploymentLevel+'</td>'
+          							+ '<th>Employment Status:</th><td>'+empHistoryList[i].EmploymentStatus.split('amp;').join('')
+          							+ '</td></tr><tr><th>Employment Type:</th><td>'+empHistoryList[i].EmploymentType+'</td>'
+          							+ '<th>Still Want to work in Sports Industry:</th><td>'+empHistoryList[i].StillWantIndustry
+          							+ '</td></tr><tr><th>Job Title:</th><td>'+empHistoryList[i].JobTitle
+          							+ '</td></tr>';
+	          			rowEmp += '<tr><td colspan="2" style="text-align:right;"><button type="button"  class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="EditTheEmpHistory()"><span class="glyphicon glyphicon-pencil"  style="padding:10px !important;"></span>Edit Employment History</button>';
+	          			rowEmp += '<td colspan="2" style="text-align:left;"><button type="button"  class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="backToEmploymentHistoryTable()"><span class="glyphicon glyphicon-arrow-left"  style="padding:10px !important;"></span>Go Back</button></tr>';
+          			}
+          		}
+          		$('#singleEmpHistory'+empLast).html(rowEmp);
+          }
+          
+          function go(nr) {
+			  $('.bb').fadeToggle(200);
+			  $('.message').toggleClass('comein');
+			  $('.check').toggleClass('scaledown');
+			  $('#go').fadeToggle(nr);
+			}
+          
+          function addTheEmpHistory() {
+          		$('#employmentHistoryTable'+empLast).hide();
+				$('#singleEmpHistory'+empLast).hide();
+				$('#addEmpHistory'+empLast).show();
+				var tab = document.getElementById('addEmpHistory'+empLast);
+          		//alert(tab);
+          		var rowEmp = '';
+          		//for(var i = 0; i < empHistoryList.length; i++) {
+          			//alert(empHistoryList[i].AccountName);
+          			//if(empHistoryList[i].Id == empId) {
+          				rowEmp += '<tr><th colspan="4" style="text-align: center;"><u>Employment History</u></th></tr>'
+          							+ '<tr><th>Company:</th><td><input id="CompanyNameNew'+empLast+'" type="text" style="border:#40c8c9 1px solid;border-radius: initial;" /></td><th>Company Region:</th>'
+									+ '<td><input id="CompanyRegionNew'+empLast+'" type="text" style="border:#40c8c9 1px solid;border-radius: initial;"/></td></tr>'
+          							+ '<tr><th>Postal Code:</th><td><input id="PostalCodeNew'+empLast+'" type="text" style="border:#40c8c9 1px solid;border-radius: initial;"/>'
+          							+ '</td><th>Start Date:</th><td><input id="StartDateNew'+empLast+'" type="date" style="border:#40c8c9 1px solid;border-radius: initial;"/></td></tr>'
+          							+ '<tr><th>End Date:</th><td><input id="EndDateNew'+empLast+'" type="date" style="border:#40c8c9 1px solid;border-radius: initial;"/></td>'
+          							+ '<th>Industry:</th><td><select id="IndustryNew'+empLast+'" style="border:#40c8c9 1px solid;border-radius: initial;"></select>'
+          							+ '</td></tr><tr><th>Employment Level:</th><td><select id="EmpLevelNew'+empLast+'" style="border:#40c8c9 1px solid;border-radius: initial;"></select></td>'
+          							+ '<th>Employment Status:</th><td><select id="EmpStatusNew'+empLast+'" style="border:#40c8c9 1px solid;border-radius: initial;"></select>'
+          							+ '</td></tr><tr><th>Employment Type:</th><td><select id="EmpTypeNew'+empLast+'" style="border:#40c8c9 1px solid;border-radius: initial;"></select></td>'
+          							+ '<th>Job Title:</th><td><input id="JobTitleNew'+empLast+'" type="text" style="border:#40c8c9 1px solid;border-radius: initial;"/>'
+          							+ '</td></tr>';
+	          			rowEmp += '<tr><td colspan="2" style="text-align:right;"><button type="button"  class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="saveSingleTheEmpHistory()"><span class="glyphicon glyphicon-floppy-disk"  style="padding:10px !important;"></span>Save</button><br />';
+	          			rowEmp += '<td colspan="2" style="text-align:left;"><button type="button"  class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="backToEmploymentHistoryTable()"><span class="glyphicon glyphicon-remove-sign"  style="padding:10px !important;"></span>Cancel</button><br /></tr>';
+          			//}
+          		//}
+          		$('#addEmpHistory'+empLast).html(rowEmp);
+          		
+          		
+          		var selIndustry = document.getElementById('IndustryNew'+empLast);
+          		document.getElementById('IndustryNew'+empLast).options.length = 0;
+          		for(var i = 0; i < empIndustryList.length; i++) {
+    				var opt = document.createElement('option');
+    				opt.innerHTML = empIndustryList[i];
+    				opt.value = empIndustryList[i];
+    				selIndustry.appendChild(opt);
+          		}
+          		var selEmpLevel = document.getElementById('EmpLevelNew'+empLast);
+          		document.getElementById('EmpLevelNew'+empLast).options.length = 0;
+          		for(var i = 0; i < empLevelList.length; i++) {
+    				var opt = document.createElement('option');
+    				opt.innerHTML = empLevelList[i];
+    				opt.value = empLevelList[i];
+    				selEmpLevel.appendChild(opt);
+          		}
+          		var selEmpStatus = document.getElementById('EmpStatusNew'+empLast);
+          		document.getElementById('EmpStatusNew'+empLast).options.length = 0;
+          		for(var i = 0; i < empStatusList.length; i++) {
+    				var opt = document.createElement('option');
+    				opt.innerHTML = empStatusList[i];
+    				opt.value = empStatusList[i];
+    				selEmpStatus.appendChild(opt);
+          		}
+          		var selEmpType = document.getElementById('EmpTypeNew'+empLast);
+          		document.getElementById('EmpTypeNew'+empLast).options.length = 0;
+          		for(var i = 0; i < empTypeList.length; i++) {
+    				var opt = document.createElement('option');
+    				opt.innerHTML = empTypeList[i];
+    				opt.value = empTypeList[i];
+    				selEmpType.appendChild(opt);
+          		}
+          }
+          
+          function saveSingleTheEmpHistory() {
+          		var CompanyNameNew = document.getElementById('CompanyNameNew'+empLast).value;
+          		//alert('CompanyNameNew'+CompanyNameNew);
+          		var CompanyRegionNew = document.getElementById('CompanyRegionNew'+empLast).value;
+          		var PostalCodeNew = document.getElementById('PostalCodeNew'+empLast).value;
+          		var IndustryNew = document.getElementById('IndustryNew'+empLast).value;
+          		var StartDateNew = document.getElementById('StartDateNew'+empLast).value;
+          		var EndDateNew = document.getElementById('EndDateNew'+empLast).value;
+          		var EmpLevelNew = document.getElementById('EmpLevelNew'+empLast).value;
+          		var EmpStatusNew = document.getElementById('EmpStatusNew'+empLast).value;
+          		var EmpTypeNew = document.getElementById('EmpTypeNew'+empLast).value;
+          		var JobTitleNew = document.getElementById('JobTitleNew'+empLast).value;
+          		UCFBWithLoginController.saveSingleTheEmpHistory(UrlAccId, CompanyNameNew, CompanyRegionNew, PostalCodeNew, StartDateNew,
+          				EndDateNew, IndustryNew, EmpLevelNew, EmpStatusNew, EmpTypeNew, JobTitleNew, function(result, event) {
+	               if (event.status) {
+	               		location.reload();
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		//hideProcessingDiv();
+	                   alert(event.message);
+	                   //hideProcessingDiv();
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+	               }
+	           });
+	          	//alert(accStreet);
+          }
+          
+          function getScope(ctrlName) {
+			    var sel = 'body[ng-controller="' + ctrlName + '"]';
+			    //alert('sel='+sel);
+			    return angular.element(sel).scope();
+			}
+          
+          $('#userDetail').click(function() {
+          		isBackButtonClicked = false;
+          });
+          
+          $('#userImage').click(function() {
+          		isBackButtonClicked = false;
+          });
+          
+          // To close the Popup on Back Button Click
+          window.onload = function (evt) {
+			    if (typeof history.pushState === "function") {
+			        history.pushState("jibberish", null, null);
+			        window.onpopstate = function (event) {
+			        	var $scope = getScope('myNewCtrl');
+			        	/*alert($scope.showModal);
+			        	
+			        	alert('event-target='+evt.target);
+			        	alert('event-type='+evt.type);
+						alert('event-props='+evt.target.getOwnPropertyNames());*/
+						
+									        	
+			            history.pushState('newjibberish', null, null);
+			            
+			        	if($scope.showModal == true) {
+			        		$scope.showModal = false;
+				        	$('.close-btn').trigger("click");
+			        	}
+			        	if(window.location.hash == '#openModal3' || window.location.hash == '#openModal2' || window.location.hash == '#openModal1') {
+			        		window.location.hash = '';
+			        		$scope.showModal = true;
+			        		//alert(window.location.hash);
+			        		//$('.close-btn').trigger("click");
+			        		
+			        	}
+			        	
+			            // Handle the back (or forward) buttons here
+			            // Will NOT handle refresh, use onbeforeunload for this.
+			        };
+			    }
+			    else {
+			        var ignoreHashChange = true;
+			        window.onhashchange = function () {
+			            if (!ignoreHashChange) {
+			                ignoreHashChange = true;
+			                window.location.hash = Math.random();
+			                alert('BackButtonClicked');
+			                // Detect and redirect change here
+			                // Works in older FF and IE9
+			                // * it does mess with your hash symbol (anchor?) pound sign
+			                // delimiter on the end of the URL
+			            }
+			            else {
+			                ignoreHashChange = false;   
+			            }
+			        };
+			    }
+			}
+          
+          function updateSingleTheEmpHistory() {
+		        
+		        //alert('Update Single EMP');
+		        var CompanyNameNew = document.getElementById('CompanyNameNew1'+empLast).value;
+		        var CompanyRegionNew = document.getElementById('CompanyRegionNew1'+empLast).value;
+          		var PostalCodeNew = document.getElementById('PostalCodeNew1'+empLast).value;
+				var StartDateNew = document.getElementById('StartDateNew1'+empLast).value;
+				var EndDateNew = document.getElementById('EndDateNew1'+empLast).value;
+          		var IndustryNew = document.getElementById('IndustryNew1'+empLast).value;
+          		var EmpLevelNew = document.getElementById('EmpLevelNew1'+empLast).value;
+          		var EmpStatusNew = document.getElementById('EmpStatusNew1'+empLast).value;
+          		var EmpTypeNew = document.getElementById('EmpTypeNew1'+empLast).value;
+          		var JobTitleNew = document.getElementById('JobTitleNew1'+empLast).value;
+          		
+          		
+          		UCFBWithLoginController.updateSingleTheEmpHistory(UrlAccId, currentEmpId, CompanyNameNew, CompanyRegionNew, PostalCodeNew, StartDateNew,
+          				EndDateNew, IndustryNew, EmpLevelNew, EmpStatusNew, EmpTypeNew, JobTitleNew, function(result, event) {
+	               if (event.status) {
+	               		location.reload();
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		//hideProcessingDiv();
+	                   alert(event.message);
+	                   //hideProcessingDiv();
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+	               }
+	           });
+          }
+          
+          function EditTheEmpHistory() {
+          		$('#employmentHistoryTable'+empLast).hide();
+				$('#singleEmpHistory'+empLast).hide();
+				$('#addEmpHistory'+empLast).show();
+          		
+				var tab = document.getElementById('addEmpHistory'+empLast);
+          		//alert(tab);
+          		var rowEmp = '';
+          		//for(var i = 0; i < empHistoryList.length; i++) {
+          			//if(empHistoryList[i].Id == empId) {
+          				rowEmp += '<tr><th colspan="4" style="text-align: center;"><u>Employment History</u></th></tr>'
+          							+ '<tr><th>Company:</th><td><input id="CompanyNameNew1'+empLast+'" type="text" style="border:#40c8c9 1px solid;border-radius: initial;"/></td><th>Company Region:</th>'
+									+ '<td><input id="CompanyRegionNew1'+empLast+'" type="text" style="border:#40c8c9 1px solid;border-radius: initial;"/></td></tr>'
+          							+ '<tr><th>Postal Code:</th><td><input id="PostalCodeNew1'+empLast+'" type="text" style="border:#40c8c9 1px solid;border-radius: initial;"/>'
+          							+ '</td><th>Start Date:</th><td><input id="StartDateNew1'+empLast+'" type="date'
+          							//+ moment(currentStartDate).format("MM-DD-YYYY")
+          							+ '" style="border:#40c8c9 1px solid;border-radius: initial;"/></td></tr>'
+          							+ '<tr><th>End Date:</th><td><input id="EndDateNew1'+empLast+'" type="date'
+          							//+ moment(currentEndDate).format("MM-DD-YYYY")
+          							+ '" style="border:#40c8c9 1px solid;border-radius: initial;"/></td><th>Industry:</th><td><select id="IndustryNew1'+empLast+'" style="border:#40c8c9 1px solid;"></select>'
+          							+ '</td></tr><tr><th>Employment Level:</th><td><select id="EmpLevelNew1'+empLast+'" style="border:#40c8c9 1px solid;"></select></td>'
+          							+ '<th>Employment Status:</th><td><select id="EmpStatusNew1'+empLast+'" style="border:#40c8c9 1px solid;"></select>'
+          							+ '</td></tr><tr><th>Employment Type:</th><td><select id="EmpTypeNew1'+empLast+'" style="border:#40c8c9 1px solid;"></select></td>'
+          							+ '<th>Job Title:</th><td><input id="JobTitleNew1'+empLast+'" type="text" style="border:#40c8c9 1px solid;border-radius: initial;"/></tr>';
+          							//alert('rowEmp='+rowEmp);
+	          			rowEmp += '<tr><td colspan="2" style="text-align:right;"><button type="button" class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="updateSingleTheEmpHistory()"><span class="glyphicon glyphicon-floppy-disk"  style="padding:10px !important;"></span>Save</button><br />';
+	          			//alert('rowEmp='+rowEmp);
+	          			rowEmp += '<td colspan="2" style="text-align:left;"><button type="button"  class="slds-m-around--large slds-p-horizontal--small slds-p-vertical--x-small font-white font-16 bg-teal" style="border: none;" onclick="backToEmploymentHistoryTable()"><span class="glyphicon glyphicon-remove-sign"  style="padding:10px !important;"></span>Cancel</button><br /></tr>';
+	          			//alert('rowEmp='+rowEmp);
+          			//}
+          		//}
+          		$('#addEmpHistory'+empLast).html(rowEmp);
+          		//alert('currentCompRegion='+currentCompRegion);
+          		
+          		var selIndustry = document.getElementById('IndustryNew1'+empLast);
+          		document.getElementById('IndustryNew1'+empLast).options.length = 0;
+          		for(var i = 0; i < empIndustryList.length; i++) {
+    				var opt = document.createElement('option');
+    				opt.innerHTML = empIndustryList[i];
+    				opt.value = empIndustryList[i];
+    				selIndustry.appendChild(opt);
+          		}
+          		var selEmpLevel = document.getElementById('EmpLevelNew1'+empLast);
+          		document.getElementById('EmpLevelNew1'+empLast).options.length = 0;
+          		for(var i = 0; i < empLevelList.length; i++) {
+    				var opt = document.createElement('option');
+    				opt.innerHTML = empLevelList[i];
+    				opt.value = empLevelList[i];
+    				selEmpLevel.appendChild(opt);
+          		}
+          		var selEmpStatus = document.getElementById('EmpStatusNew1'+empLast);
+          		document.getElementById('EmpStatusNew1'+empLast).options.length = 0;
+          		for(var i = 0; i < empStatusList.length; i++) {
+    				var opt = document.createElement('option');
+    				opt.innerHTML = empStatusList[i];
+    				opt.value = empStatusList[i];
+    				selEmpStatus.appendChild(opt);
+          		}
+          		var selEmpType = document.getElementById('EmpTypeNew1'+empLast);
+          		document.getElementById('EmpTypeNew1'+empLast).options.length = 0;
+          		for(var i = 0; i < empTypeList.length; i++) {
+    				var opt = document.createElement('option');
+    				opt.innerHTML = empTypeList[i];
+    				opt.value = empTypeList[i];
+    				selEmpType.appendChild(opt);
+          		}
+          		
+          		document.getElementById('CompanyNameNew1'+empLast).value = currentCompanyName;
+          		//alert(document.getElementById('CompanyNameNew1'+empLast).value);
+          		document.getElementById('CompanyRegionNew1'+empLast).value = currentCompRegion;
+          		document.getElementById('PostalCodeNew1'+empLast).value = currentPostalCode;
+          		//alert(currentStartDate);
+          		//alert(moment(currentStartDate, 'DD-MM-YYYY').format('YYYY-MM-DD'));
+				document.getElementById('StartDateNew1'+empLast).value = moment(currentStartDate, 'DD-MM-YYYY').format("YYYY-MM-DD");
+				document.getElementById('EndDateNew1'+empLast).value = moment(currentEndDate, 'DD-MM-YYYY').format("YYYY-MM-DD");
+          		document.getElementById('IndustryNew1'+empLast).value = currentIndustry;
+          		document.getElementById('EmpLevelNew1'+empLast).value = currentEmploymentLevel;
+          		document.getElementById('EmpStatusNew1'+empLast).value = currentEmploymentStatus;
+          		document.getElementById('EmpTypeNew1'+empLast).value = currentEmploymentType;
+          		document.getElementById('JobTitleNew1'+empLast).value = currentJobTitle;
+          }
+          
+          function backToAccountDetails() {
+          		$('#employmentHistoryTable'+empLast).hide();
+				$('#singleEmpHistory'+empLast).hide();
+				$('#addEmpHistory'+empLast).hide();
+				$('#accountDetailsTable'+empLast).show();
+          }
+          
+          function backToEmploymentHistoryTable() {
+          		$('#employmentHistoryTable'+empLast).show();
+          		$('#accountDetailsTable'+empLast).hide();
+				$('#singleEmpHistory'+empLast).hide();
+				$('#addEmpHistory'+empLast).hide();
+          }
+          var accLast = '';
+          function saveAccountDetails(event) {
+          	accLast = $(event).attr('id');
+          	accLast = accLast.substr(accLast.length - 1);
+          	//alert('in function');
+          	showProcessingDiv();
+            var AccId = "{!$CurrentPage.parameters.accId}";
+          	if(document.getElementById('accountPhone'+accLast).innerHTML == 'empty') {
+          		var accPhone = '';
+          	} else {
+          		var accPhone = document.getElementById('accountPhone'+accLast).innerHTML;
+          	}
+          	//alert(accPhone);
+          	
+          	if(document.getElementById('accountOtherPhone'+accLast).innerHTML == 'empty') {
+          		var accOtherPhone = '';
+          	} else {
+          		var accOtherPhone = document.getElementById('accountOtherPhone'+accLast).innerHTML;
+          	}
+          	//alert(accOtherPhone);
+          	
+          	/*if(document.getElementById('accountBillingStreet'+accLast).innerHTML == 'empty') {
+          		var accStreet = '';
+          	} else {
+          		var accStreet = document.getElementById('accountBillingStreet'+accLast).innerHTML;
+          	}
+          	//alert(accStreet);
+          	
+          	if(document.getElementById('accountBillingCity'+accLast).innerHTML == 'empty') {
+          		var accCity = '';
+          	} else {
+          		var accCity = document.getElementById('accountBillingCity'+accLast).innerHTML;
+          	}
+          	//alert(accCity);
+          	
+          	if(document.getElementById('accountBillingState'+accLast).innerHTML == 'empty') {
+          		var accState = '';
+          	} else {
+          		var accState = document.getElementById('accountBillingState'+accLast).innerHTML;
+          	}
+          	//alert(accState);
+          	
+          	if(document.getElementById('accountPostalCode'+accLast).innerHTML == 'empty') {
+          		var accPostalCode = '';
+          	} else {
+          		var accPostalCode = document.getElementById('accountPostalCode'+accLast).innerHTML;
+          	}
+          	//alert(accPostalCode);
+          	*/
+          	/*if(document.getElementById('accountLocation'+accLast).innerHTML == 'empty') {
+          		var accLocation = '';
+          	} else {
+          		var accLocation = document.getElementById('accountLocation'+accLast).innerHTML;
+          	}
+          	alert(accLocation);*/
+          	
+          	var beforeAddress = document.getElementById('accFullAddress'+accLast).innerHTML;
+          	//alert('beforeAddress = ' + beforeAddress);
+          	beforeAddress = beforeAddress.replace('<pre class="ng-binding">','');
+          	beforeAddress = beforeAddress.replace('</pre>','');
+          	//alert('beforeAddress 2 = ' + beforeAddress);
+          	if(beforeAddress == 'empty') {
+          		var accFullAddress = '';
+          	} else {
+          		var accFullAddress = beforeAddress;
+          	}
+          	//alert(accFullAddress);
+          	
+          	
+          	/*if(document.getElementById('employementCompanyRegion'+accLast).innerHTML == 'empty') {
+          		var empCompanyRegion = '';
+          	} else {
+          		var empCompanyRegion = document.getElementById('employementCompanyRegion'+accLast).innerHTML;
+          	}
+          	alert(empCompanyRegion);
+          	
+          	if(document.getElementById('employementPostalCode'+accLast).innerHTML == 'empty') {
+          		var empPostalCode = '';
+          	} else {
+          		var empPostalCode = document.getElementById('employementPostalCode'+accLast).innerHTML;
+          	}
+          	alert(empPostalCode);
+          	
+          	
+          	if(document.getElementById('employementIndustry'+accLast).innerHTML == 'empty') {
+          		var empIndustry = '';
+          	} else {
+          		var empIndustry = document.getElementById('employementIndustry'+accLast).innerHTML;
+          	}
+          	alert(empIndustry);
+          	
+          	if(document.getElementById('employementEmploymentLevel'+accLast).innerHTML == 'empty') {
+          		var empEmploymentLevel = '';
+          	} else {
+          		var empEmploymentLevel = document.getElementById('employementEmploymentLevel'+accLast).innerHTML;
+          	}
+          	alert(empEmploymentLevel);
+          	
+          	if(document.getElementById('employementEmploymentStatus'+accLast).innerHTML == 'empty') {
+          		var empEmploymentStatus = '';
+          	} else {
+          		var empEmploymentStatus = document.getElementById('employementEmploymentStatus'+accLast).innerHTML;
+          	}
+          	alert(empEmploymentStatus);
+          	
+          	if(document.getElementById('employementEmploymentType'+accLast).innerHTML == 'empty') {
+          		var empEmploymentType = '';
+          	} else {
+          		var empEmploymentType = document.getElementById('employementEmploymentType'+accLast).innerHTML;
+          	}
+          	alert(empEmploymentType);
+          	
+          	if(document.getElementById('employementJobTitle'+accLast).innerHTML == 'empty') {
+          		var empJobTitle = '';
+          	} else {
+          		var empJobTitle = document.getElementById('employementJobTitle'+accLast).innerHTML;
+          	}*/
+          	//alert(empJobTitle);
+			UCFBWithLoginController.saveAccDetails(AccId, accPhone, accOtherPhone, accFullAddress, function(result, event) {
+	               if (event.status) {
+	                   //alert('Application Object Created');
+	                   //alert('Succeesss in saving');
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: green;'>Application Successfully Saved.</span>";
+	                   //window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId;
+	                   //setTimeout(function(){window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId;},1000)
+	                   //setTimeout(function(){window.location.reload(true);},100)
+	                   location.reload();
+	                   //allReasons = result;
+	                   //alert('allTimings=' + result);
+	                   //populateResonsList();
+	               } else {
+	               		//$('#errArea').show();
+	               		//$('#errMsg').html(event.message);
+	               		//hideProcessingDiv();
+	                   alert(event.message);
+	                   //hideProcessingDiv();
+	                   //document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+	               }
+	           });
+          }
+          
+          function redirectToUrl(urlValue) {
+          		window.location.href = urlValue;
+          }
+          
+          function uploadTheCvAgain(jobId) {
+          	
+          	try {
+          		files = jQuery('#'+jobId).prop("files");
+          		//alert('files='+files);
+          		alert(files);
+          		alert(files.length);
+          		if(files.length < 1) {
+          			alert('{!$Label.selectFileFirst}');
+          			return false;
+          		}
+          		
+          		
+          	for(var i = 0, f; f = files[i]; i++) {
+          		showProcessingDiv();
+          		var reader = new FileReader();
+          		reader.file = f;
+          		
+          		reader.onload = function(e) {
+					//alert('target = ' + e.target.result);
+					FileArrayBuffer = e.target.result;
+					//alert('FileArrayBuffer = ' + FileArrayBuffer);
+					var attName = this.file.Name;
+					var attContentType = this.file.type;
+					//alert(attName + ' = ' + attContentType);
+					var appObjName = attName;
+					var appObjAcc = '{!$CurrentPage.parameters.accId}';
+					var binary = "";
+					var bytes = new Uint8Array(e.target.result);
+					var length = bytes.byteLength;
+					for (var i = 0; i < length; i++)
+		             {	
+		              binary += String.fromCharCode(bytes[i]);
+		             }
+		             //alert('Running 2');
+		             
+		             var attachmentPdfNew = window.btoa(binary);
+		        	
+		             var attBody = (new sforce.Base64Binary(binary)).toString();
+		             //alert(attBody);
+		             
+		             UCFBWithLoginController.createReAttachment(attContentType, attachmentPdfNew, jobId, function(result, event) {
+		             	//alert('In');
+		               if (event.status) {
+		                   //alert('Application Object Created');
+		                   //alert('result = ' + result);
+		                   //document.getElementById("messagebox").innerHTML = "<span style='color: green;'>Application Successfully Saved.</span>";
+		                   //window.location.href = 'http://dev-ucfb.cs86.force.com/ucfb?accId='+UrlAccId;
+		                   location.reload();
+		                   //$('#jcfull').load(url + ' #jcfull-tab1');
+		               } else {
+		               		//$('#errArea').show();
+		               		//$('#errMsg').html(event.message);
+		               		//hideProcessingDiv();
+		                   alert(event.message);
+		                   //hideProcessingDiv();
+		                   //document.getElementById("messagebox").innerHTML = "<span style='color: #ff0000;'>"+error.message+"</span>";
+		               }
+		           });
+				};
+				reader.readAsArrayBuffer(f);
+				}
+				} catch(e) {
+					alert(e);
+				}
+          }
+             
+    </script>
+</apex:component>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>36.0</apiVersion>
+    <description>JOB APPLY NOW POPOVER LAYOUT: This component generating apply now popover, apply now slide box, browse file, file upload, under job &amp; career section.</description>
+    <label>jobApply</label>
+</ApexComponent>
